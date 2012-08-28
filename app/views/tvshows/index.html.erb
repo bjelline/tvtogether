@@ -1,0 +1,18 @@
+<h1>Fernsehserien verwalten</h1>
+
+<% @tvshows.each do |tvshow| %>
+  <div class="tvshow">
+    <h3><%= tvshow.title %>
+    <%= link_to "IMBD", "http://imdb.com" + tvshow.imdb_url %></h3>
+    <%= render :partial => 'episodes/list', :locals => { :episodes => tvshow.episodes } %>  
+    <p>
+      <%= link_to 'Neue Episode Hinzufügen', new_tvshow_episode_path( tvshow ) %>
+    </p>
+    <p class="admin">
+      <%= link_to 'Edit', edit_tvshow_path(tvshow) %> |  
+      <%= link_to 'Destroy', tvshow, method: :delete, data: { confirm: 'Are you sure?' } %>
+    </p>
+  </div>
+<% end %>
+
+<%= link_to 'New TV-Show', new_tvshow_path %>
