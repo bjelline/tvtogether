@@ -1,15 +1,15 @@
-<h1><%= @tvshow.title %></h1>
+<h1><%= @tvshow.name %></h1>
+<p>
+<%= link_to 'Zurück zu den Serien', tvshows_path %>
+</p>
 
 <% @episodes.each do |episode| %>
-    Season <%= episode.season %>
-    Episode <%= episode.no %>. 
-    <%= link_to 'Destroy', tvshow_episode_path( episode.tvshow, episode ), method: :delete, data: { confirm: 'Are you sure?' } %>
+    Season <%= episode.seasonnum %>
+    Episode <%= episode.epnum %>: 
+    <b><%= link_to episode.title, episode.link %></b>. 
   <br>
 <% end %>
 
 <p>
-<%= link_to 'Neue Episode Hinzufügen', new_tvshow_episode_path( @tvshow ) %>
-</p>
-<p>
-<%= link_to 'Back', tvshows_path %>
+<%= link_to 'Zurück zu den Serien', tvshows_path %>
 </p>

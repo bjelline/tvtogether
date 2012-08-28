@@ -1,7 +1,7 @@
 Serienshare::Application.routes.draw do
 
-  resources :tvshows do
-    resources :episodes
+  resources :tvshows, :only => [:index, :new, :create, :destroy] do
+    resources :episodes, :only => [:index]
   end
   root :to => 'tvshows#index'
 

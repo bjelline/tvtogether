@@ -1,83 +1,49 @@
 class TvshowsController < ApplicationController
-  # GET /tvshows
-  # GET /tvshows.json
   def index
     @tvshows = Tvshow.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @tvshows }
-    end
   end
 
-  # GET /tvshows/1
-  # GET /tvshows/1.json
-  def show
-    @tvshow = Tvshow.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @tvshow }
-    end
-  end
-
-  # GET /tvshows/new
-  # GET /tvshows/new.json
+  # GET /tvshows/new                 - ohne parameter 'title' - ist das nomale formular
+  # GET /tvshows/new?title=Sherlock  - nur ein suchfeld: sucht erst bei tvrage und erzeugt dann
+  #                                    das normale formular
   def new
     @tvshow = Tvshow.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @tvshow }
+    unless params[:title].blank?
+      tvrage = Tvrage.find_by_title( params[:title] )
+      gon.shows = tvrage.index_by{|s| s["showid"] }
     end
-  end
 
-  # GET /tvshows/1/edit
-  def edit
-    @tvshow = Tvshow.find(params[:id])
+    if tvrage.nil? 
+      render "new"
+    else 
+      @tvrage_options = tvrage.map{|s|[s["name"],s["showid"]]}
+      render "new_with_data"
+    end
   end
 
   # POST /tvshows
-  # POST /tvshows.json
   def create
     @tvshow = Tvshow.new(params[:tvshow])
 
-    respond_to do |format|
-      if @tvshow.save
-        format.html { redirect_to tvshow_episodes_path(@tvshow), notice: 'Tvshow was successfully created.' }
-        format.json { render json: @tvshow, status: :created, location: tvshow_episodes_path(@tvshow) }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @tvshow.errors, status: :unprocessable_entity }
-      end
+    unless @tvshow.save
+      render "new_with_data"
+      return
     end
-  end
 
-  # PUT /tvshows/1
-  # PUT /tvshows/1.json
-  def update
-    @tvshow = Tvshow.find(params[:id])
-
-    respond_to do |format|
-      if @tvshow.update_attributes(params[:tvshow])
-        format.html { redirect_to @tvshow, notice: 'Tvshow was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @tvshow.errors, status: :unprocessable_entity }
-      end
+    Tvrage.episodes( @tvshow.showid ).each do |ep|
+      Rails.logger.warn("Episoden-Daten: #{ep}")
+      @tvshow.episodes.create( ep )
     end
+
+    redirect_to tvshow_episodes_path(@tvshow), notice: 'Serie wurde erfolgreich gespeichert'
   end
 
   # DELETE /tvshows/1
-  # DELETE /tvshows/1.json
   def destroy
     @tvshow = Tvshow.find(params[:id])
     @tvshow.destroy
 
-    respond_to do |format|
-      format.html { redirect_to tvshows_url }
-      format.json { head :no_content }
-    end
+    redirect_to tvshows_url
   end
 end

@@ -11,22 +11,33 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120828152139) do
+ActiveRecord::Schema.define(:version => 20120828202049) do
 
   create_table "episodes", :force => true do |t|
-    t.integer  "season"
-    t.integer  "no"
     t.integer  "tvshow_id"
+    t.integer  "epnum"
+    t.integer  "seasonnum"
+    t.string   "title"
+    t.string   "prodnum"
+    t.date     "airdate"
+    t.string   "link"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "title"
   end
 
   create_table "tvshows", :force => true do |t|
-    t.string   "title"
-    t.string   "imdb_url"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "showid"
+    t.string   "link"
+    t.string   "name"
+    t.string   "prodnum"
+    t.string   "country"
+    t.string   "started"
+    t.string   "ended"
+    t.integer  "seasons"
+    t.string   "status"
+    t.string   "classification"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
 end

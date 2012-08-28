@@ -1,0 +1,74 @@
+<h1>New Tvshow as found on TVRage</h1>
+
+<%= form_for(@tvshow) do |f| %>
+  <% if @tvshow.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tvshow.errors.count, "error") %> Fehler, die Serie kann so nicht gespeichert werden:</h2>
+
+      <ul>
+      <% @tvshow.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if @tvrage_options %>
+
+    <div class="field">
+      <%= f.label :showid %><br />
+      <%= f.select(:showid, options_for_select( @tvrage_options ),  {:prompt => 'Serie auswählen'})  %>
+    </div>
+
+  <% else %>
+
+    <div class="field">
+      <%= f.label :showid %><br />
+      <%= f.text_field :showid %>
+    </div>
+
+  <% end %>
+
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :link %><br />
+    <%= f.text_field :link %>
+  </div>
+  <div class="field">
+    <%= f.label :prodnum %><br />
+    <%= f.text_field :prodnum %>
+  </div>
+  <div class="field">
+    <%= f.label :country %><br />
+    <%= f.text_field :country %>
+  </div>
+  <div class="field">
+    <%= f.label :seasons %><br />
+    <%= f.number_field :seasons %>
+  </div>
+  <div class="field">
+    <%= f.label :started %><br />
+    <%= f.text_field :started %>
+  </div>
+  <div class="field">
+    <%= f.label :ended %><br />
+    <%= f.text_field :ended %>
+  </div>
+  <div class="field">
+    <%= f.label :classification %><br />
+    <%= f.text_field :classification %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit :value => "Diese Serie - und ihre Folgen - abspeichern"  %>
+  </div>
+<% end %>
+<%= link_to 'Back', tvshows_path %>
